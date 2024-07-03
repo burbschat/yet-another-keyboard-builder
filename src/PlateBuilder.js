@@ -128,6 +128,13 @@ export function buildPlate(keysArray, generatorOptions) {
 
         // Render stabilizer
         let stabilizerCutout = stabilizerGenerator.generate(key, generatorOptions)
+        // Use key.stabilizerTypeOverride to override the default stabilizer type for given key
+        console.log(key.stabilizerTypeOverride)
+        // TODO Set alternative generator based on value of stabilizerTypeOverride
+        if (key.stabilizerTypeOverride) {
+            let alternativeStabilizerGenerator  = new StabilizerAlpsAEK();
+            stabilizerCutout = alternativeStabilizerGenerator.generate(key, generatorOptions)
+        }
         if (stabilizerCutout) {
             stabilizerCutout.origin = originNum
             stabilizerCutout = makerjs.model.rotate(stabilizerCutout, key.angle.plus(key.stabilizerAngle).times(-1).toNumber(), originNum)

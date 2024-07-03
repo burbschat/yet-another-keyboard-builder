@@ -98,6 +98,7 @@ export function parseKle(kleText) {
     let independentSwitchAngle = new Decimal(0)
     let shift6UStabilizers = false
     let skipOrientationFix = false
+    let stabilizerTypeOverride = false
 
     // The parsing bracket will be surrounded by a try-catch to expect malformed data
 
@@ -117,7 +118,7 @@ export function parseKle(kleText) {
                     // Otherwise add the key
                     else {
                         // Define and add the key
-                        let newKey = new Key(currX, currY, width, height, width2, height2, currAngle, currRotX, currRotY, independentSwitchAngle, stabilizerAngle, shift6UStabilizers, skipOrientationFix)
+                        let newKey = new Key(currX, currY, width, height, width2, height2, currAngle, currRotX, currRotY, independentSwitchAngle, stabilizerAngle, shift6UStabilizers, skipOrientationFix, stabilizerTypeOverride)
                         keys.push(newKey)
                     }
                     // Then conveniently use the current width value to increment the X cursor
@@ -131,6 +132,7 @@ export function parseKle(kleText) {
                     stabilizerAngle = new Decimal(0)
                     shift6UStabilizers = false
                     skipOrientationFix = false
+                    stabilizerTypeOverride = false
                     
                 }
 
@@ -185,6 +187,11 @@ export function parseKle(kleText) {
                     }
                     if (element.hasOwnProperty('_so')) {
                         skipOrientationFix = element._so
+                    }
+                    if (element.hasOwnProperty('_s')) {
+                        console.log("FOUND S!")
+                        console.log(element._s)
+                        stabilizerTypeOverride = element._s
                     }
 
                     // Cursor offsets

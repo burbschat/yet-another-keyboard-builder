@@ -2,7 +2,7 @@ import Decimal from "decimal.js";
 
 export class Key {
 
-    constructor(x, y, width, height, width2, height2, angle, rotx, roty, independentSwitchAngle, stabilizerAngle, shift6UStabilizers, skipOrientationFix) {
+    constructor(x, y, width, height, width2, height2, angle, rotx, roty, independentSwitchAngle, stabilizerAngle, shift6UStabilizers, skipOrientationFix, stabilizerTypeOverride) {
         this.x = x;             // NOT x from KLE syntax (KLE x refers to sequential offset)
         this.y = y;             // NOT y from KLE syntax (KLE y refers to sequential offset)
         this.width = width;     // w
@@ -16,6 +16,7 @@ export class Key {
         this.shift6UStabilizers = shift6UStabilizers
         this.independentSwitchAngle = independentSwitchAngle
         this.skipOrientationFix = skipOrientationFix
+        this.stabilizerTypeOverride = stabilizerTypeOverride
 
         // Generate center-coords and corners
         this.centerX = this.x.plus(this.width.dividedBy(new Decimal(2)))
