@@ -68,30 +68,35 @@ export function buildPlate(keysArray, generatorOptions) {
             return null
     }
 
-    let stabilizerGenerator = null
-    switch (generatorOptions.stabilizerCutoutType) {
-        case "mx-basic":
-            stabilizerGenerator = new StabilizerMXBasic();
-            break;
-        case "mx-small":
-            stabilizerGenerator = new StabilizerMXSmall();
-            break;
-        case "mx-spec":
-            stabilizerGenerator = new StabilizerMXSpec();
-            break;
-        case "alps-aek":
-            stabilizerGenerator = new StabilizerAlpsAEK();
-            break;
-        case "alps-at101":
-            stabilizerGenerator = new StabilizerAlpsAT101();
-            break;
-        case "none":
-            stabilizerGenerator = new NullGenerator();
-            break;
-        default:
-            console.error("Unsupported stabilizer type")
-            return null
+    function getStabilizerGenerator(type) {
+        let generator = null
+        switch (type) {
+            case "mx-basic":
+                generator = new StabilizerMXBasic();
+                break;
+            case "mx-small":
+                generator = new StabilizerMXSmall();
+                break;
+            case "mx-spec":
+                generator = new StabilizerMXSpec();
+                break;
+            case "alps-aek":
+                generator = new StabilizerAlpsAEK();
+                break;
+            case "alps-at101":
+                generator = new StabilizerAlpsAT101();
+                break;
+            case "none":
+                generator = new NullGenerator();
+                break;
+            default:
+                console.error("Unsupported stabilizer type")
+                return null
+        }
+        return generator
     }
+
+    let stabilizerGenerator = getStabilizerGenerator(generatorOptions.stabilizerCutoutType)
 
     let acousticGenerator = null
     switch (generatorOptions.acousticCutoutType) {
@@ -130,10 +135,10 @@ export function buildPlate(keysArray, generatorOptions) {
         let stabilizerCutout = stabilizerGenerator.generate(key, generatorOptions)
         // Use key.stabilizerTypeOverride to override the default stabilizer type for given key
         console.log(key.stabilizerTypeOverride)
-        // TODO Set alternative generator based on value of stabilizerTypeOverride
+        // TODO So far this just fails to generate a plate if a not supported string is passed
         if (key.stabilizerTypeOverride) {
-            let alternativeStabilizerGenerator  = new StabilizerAlpsAEK();
-            stabilizerCutout = alternativeStabilizerGenerator.generate(key, generatorOptions)
+            let overridingStabilizerGenerator = getStabilizerGenerator(key.stabilizerTypeOverride)
+            stabilizerCutout = overridingStabilizerGenerator.generate(key, generatorOptions)
         }
         if (stabilizerCutout) {
             stabilizerCutout.origin = originNum
